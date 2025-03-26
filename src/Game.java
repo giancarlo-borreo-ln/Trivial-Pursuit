@@ -5,10 +5,10 @@ import java.util.Scanner;
 public class Game {
     private List<Player> players = new ArrayList<>();
     private GameBoard board;
-    private QuestionBank questionBank;
-    private Dice dice;
+    private QuestionBank questionBank = new QuestionBank();
+    private Dice dice = new Dice();
     private int currentPlayerIndex;
-    private Scanner scanner;
+    private Scanner scanner = new Scanner(System.in);
 
     public Game(List<Player> players, GameBoard board, QuestionBank questionBank, Dice dice, int currentPlayerIndex, Scanner scanner) {
         this.players = players;
@@ -19,7 +19,13 @@ public class Game {
         this.scanner = scanner;
     }
 
-    public void Start(){
+    public Game(List<Player> players, GameBoard board, QuestionBank questionBank) {
+        this.players = players;
+        this.board = board;
+        this.questionBank = questionBank;
+    }
+
+    public void start(){
         System.out.println("Benvenuti al java trivial pursuit: ");
         boolean gameEnded = false;
         while(!gameEnded) {
@@ -48,16 +54,16 @@ public class Game {
                 System.out.println("Risposta: ");
                 String answer = scanner.nextLine();
 
-                if(answer.equals(question.getAnswerText())){
+                if(answer.equalsIgnoreCase(question.getAnswerText())){
                     System.out.println("Risposta corretta! Congratulazioni hai vinto un punto e ti avvicini di un punto a vincere la sagra del cinghiale");
                     currentPlayer.addPunto(topic);
                     if(currentPlayer.verificaVittoria()){
                         System.out.println("Hai vinto la sagra del cinghiale!");
                         gameEnded = true;
                         continue;
-                    }else{
-                        System.out.println("Risposta errata la risposta corretta era: " + question.getAnswerText());
                     }
+                }else{
+                    System.out.println("Risposta errata la risposta corretta era: " + question.getAnswerText());
                 }
 
                 currentPlayerIndex = (currentPlayerIndex+1)%players.size();
